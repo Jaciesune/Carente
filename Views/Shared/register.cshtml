@@ -1,0 +1,36 @@
+﻿@model Register
+@{
+    ViewData["Title"] = "Rejestracja";
+}
+
+<h2>Rejestracja</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label asp-for="imie"></label>
+        <input asp-for="imie" />
+        <span asp-validation-for="imie" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="nazwisko"></label>
+        <input asp-for="nazwisko" />
+        <span asp-validation-for="nazwisko" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="email"></label>
+        <input asp-for="email" />
+        <span asp-validation-for="email" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="haslo"></label>
+        <input asp-for="haslo" type="password" />
+        <span asp-validation-for="haslo" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="tel"></label>
+        <input asp-for="tel" />
+        <span asp-validation-for="tel" class="text-danger"></span>
+    </div>
+    <button type="submit">Zarejestruj</button>
+</form>
+
