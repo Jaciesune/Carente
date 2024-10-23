@@ -6,4 +6,7 @@ public class CarenteContext : DbContext
 
     // DbSet dla tabeli Uzytkownik
     public DbSet<Uzytkownik> Uzytkownik { get; set; }
+
+    // DbSet dla tabeli Oferta
+    public DbSet<Offer> Oferta { get; set; } 
 }

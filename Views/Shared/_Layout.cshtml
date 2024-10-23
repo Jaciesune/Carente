@@ -25,8 +25,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Index">Użytkownik</a>
                         </li>
+                        <!-- Przycisk do dodawania nowej oferty -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-success" asp-area="" asp-controller="Offer" asp-action="Create">Dodaj Ofertę</a>
+                        </li>
                     </ul>
-                    <!-- Zaktualizowane linki do kontrolera Account -->
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("UserId") != null) // Sprawdzenie, czy użytkownik jest zalogowany
                         {

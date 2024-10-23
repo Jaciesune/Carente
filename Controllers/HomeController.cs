@@ -1,14 +1,23 @@
 using Carente.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore; // Dodaj ten import
+using System.Threading.Tasks;
 
 namespace Carente.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly CarenteContext _context;
+
+        public HomeController(CarenteContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var oferty = await _context.Oferta.ToListAsync(); // Pobierz oferty z bazy danych
+            return View(oferty); // Przeka¿ oferty do widoku
         }
 
         public IActionResult Privacy()
@@ -19,21 +28,18 @@ namespace Carente.Controllers
         public IActionResult User()
         {
             return View();
-
-
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var model = new ImageDetailsViewModel
+            var oferta = await _context.Oferta.FindAsync(id);
+            if (oferta == null)
             {
-                Id = id,
-                Title = $"Image {id}",
-                Description = $"Details of image {id}",
-                ImageUrl = $"/Images/1.png"
-            };
+                return NotFound(); // Jeœli oferta nie zosta³a znaleziona, zwróæ 404
+            }
 
-            return View(model);
+            return View(oferta); // Zwróæ ofertê do widoku
         }
+
     }
 }
