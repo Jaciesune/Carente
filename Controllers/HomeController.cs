@@ -16,8 +16,23 @@ namespace Carente.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var oferty = await _context.Oferta.ToListAsync(); // Pobierz oferty z bazy danych
-            return View(oferty); // Przeka¿ oferty do widoku
+            var oferty = await _context.Oferta.ToListAsync();
+            return View(oferty);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            // Pobierz samochód z oferty, w tym dane oferty
+            var car = await _context.Samochod
+                .Include(c => c.Oferta) // Do³¹cz ofertê
+                .FirstOrDefaultAsync(c => c.Id == id); // ZnajdŸ samochód po Id
+
+            if (car == null)
+            {
+                return NotFound(); // Zwróæ b³¹d 404, jeœli samochód nie istnieje
+            }
+
+            return View(car); // Zwróæ widok z danymi samochodu
         }
 
         public IActionResult Privacy()
@@ -29,17 +44,5 @@ namespace Carente.Controllers
         {
             return View();
         }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            var oferta = await _context.Oferta.FindAsync(id);
-            if (oferta == null)
-            {
-                return NotFound(); // Jeœli oferta nie zosta³a znaleziona, zwróæ 404
-            }
-
-            return View(oferta); // Zwróæ ofertê do widoku
-        }
-
     }
 }

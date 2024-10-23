@@ -1,13 +1,25 @@
-﻿@model Offer
+﻿@model Carente.Models.Car
 
-@{
-    ViewData["Title"] = "Szczegóły Oferty";
-}
+<h1>Szczegóły samochodu</h1>
 
-<h2>@Model.Opis</h2>
-<p><strong>Cena:</strong> @Model.Cena</p>
-<p><strong>Ocena:</strong> @Model.Ocena</p>
-<p><strong>Status:</strong> @Model.Status</p>
-<p><strong>ID Rezerwacji:</strong> @Model.Rezerwacja_Id</p>
+<div>
+    <h3>Samochód</h3>
+    <p><strong>Marka:</strong> @Model.Marka</p>
+    <p><strong>Model:</strong> @Model.Model</p>
+    <p><strong>Typ silnika:</strong> @Model.Typ_Silnika</p>
+    <p><strong>Numer VIN:</strong> @Model.Nr_Vin</p>
+    <p><strong>Ilość drzwi:</strong> @Model.Ilosc_Drzwi</p>
+    <p><strong>Pojemność silnika:</strong> @Model.Pojemnosc_Silnika</p>
+    <p><strong>Kolor:</strong> @Model.Kolor</p>
+    <p><strong>Ilość miejsc:</strong> @Model.Ilosc_Miejsc</p>
+    <p><strong>Rocznik:</strong> @Model.Rocznik</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+</div>
 
-<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Powrót do Ofert</a>
+<div>
+    <h3>Oferta</h3>
+    <p><strong>Cena:</strong> @Model.Oferta.Cena</p>
+    <p><strong>Ocena:</strong> @Model.Oferta.Ocena</p>
+    <p><strong>Opis:</strong> @Model.Oferta.Opis</p>
+    <p><strong>Status:</strong> @Model.Oferta.Status</p>
+</div>
