@@ -15,10 +15,7 @@
         public int Rocznik { get; set; } // Rok produkcji
         public string Status { get; set; } // Status samochodu
 
-        // Klucz obcy do tabeli oferta
-        public int Oferta_Id { get; set; }
-
-        // Możesz również dodać nawigację do oferty, jeśli chcesz
-        public virtual Offer Oferta { get; set; }
+        public int? Oferta_Id { get; set; }
+        public virtual Offer Oferta { get; set; } // Połączenie z ofertą
     }
 }
