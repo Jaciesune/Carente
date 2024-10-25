@@ -1,11 +1,11 @@
 ﻿using Carente.Models;
-using Microsoft.AspNetCore.Mvc; // Upewnij się, że masz tę przestrzeń nazw
-using Microsoft.AspNetCore.Mvc.Rendering; // Wymagane do ViewBag
-using Microsoft.EntityFrameworkCore; // Wymagane do DbContext
-using System.Linq; // Potrzebne do LINQ
-using System.Threading.Tasks; // Potrzebne do asynchronicznych metod
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace YourNamespace.Controllers // Zmień na odpowiednią przestrzeń nazw dla Twojego kontrolera
+namespace YourNamespace.Controllers // Zmień na odpowiednią przestrzeń nazw dla Twojego projektu
 {
     public class OfferController : Controller
     {
@@ -38,32 +38,32 @@ namespace YourNamespace.Controllers // Zmień na odpowiednią przestrzeń nazw d
         {
             if (ModelState.IsValid)
             {
-                // Tworzenie nowej oferty
-                var oferta = new Offer
+                // Tworzenie i zapis nowej oferty
+                var newOffer = new Offer
                 {
                     Cena = offer.Cena,
                     Opis = offer.Opis,
-                    // 'Ocena' i 'Rezerwacja_Id' są pomijane
                 };
 
-                // Dodanie oferty do bazy danych
-                _context.Oferta.Add(oferta);
+                // Dodanie nowej oferty do bazy danych
+                _context.Oferta.Add(newOffer);
                 await _context.SaveChangesAsync();
 
-                // Znajdź wybrany samochód
+                // Znalezienie i zaktualizowanie wybranego samochodu
                 var car = await _context.Samochod.FindAsync(offer.SelectedCarId);
                 if (car != null)
                 {
-                    car.Oferta_Id = oferta.Id;
+                    car.Oferta_Id = newOffer.Id;
                     car.Status = "Niedostępny";
                     _context.Samochod.Update(car);
                     await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction("Index");
+                // Przekierowanie na stronę główną
+                return RedirectToAction("Index", "Home");
             }
 
-            // Jeśli model nie jest prawidłowy, zwróć formularz z błędami
+            // Jeśli występują błędy, ponownie wyświetl formularz z dostępnymi samochodami
             var availableCars = await _context.Samochod
                 .Where(c => c.Status == "Dostepny")
                 .Select(c => new

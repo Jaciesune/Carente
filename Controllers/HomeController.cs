@@ -20,13 +20,13 @@ namespace Carente.Controllers
         {
             var carOffers = await _context.Samochod
                 .Include(c => c.Oferta)
-                .Where(c => c.Oferta.Status == "Dostêpna") // Dodaj filtr na status
+                .Where(c => c.Oferta.Status == "Dostêpna") // tylko oferty o statusie "Dostêpna"
                 .Select(c => new CarOffer
                 {
-                    Id = c.Id, // Upewnij siê, ¿e przypisujesz Id
                     Marka = c.Marka,
                     Rocznik = c.Rocznik,
-                    Cena = c.Oferta != null ? (decimal)c.Oferta.Cena : 0
+                    Cena = (decimal)c.Oferta.Cena,
+                    Oferta_Id = (int)c.Oferta_Id // dodaj to, aby przekazaæ Oferta_Id do widoku
                 })
                 .ToListAsync();
 
@@ -35,13 +35,11 @@ namespace Carente.Controllers
 
 
 
-
-
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int ofertaId)
         {
             var car = await _context.Samochod
                 .Include(c => c.Oferta)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Oferta_Id == ofertaId);
 
             if (car == null)
             {
@@ -50,6 +48,7 @@ namespace Carente.Controllers
 
             return View(car);
         }
+
 
         public IActionResult Privacy()
         {
@@ -60,5 +59,29 @@ namespace Carente.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOffer(int ofertaId)
+        {
+            var oferta = await _context.Oferta.FindAsync(ofertaId);
+            if (oferta == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Samochod.FirstOrDefaultAsync(c => c.Oferta_Id == ofertaId);
+            if (car != null)
+            {
+                car.Oferta_Id = null;
+                car.Status = "Dostêpny";
+            }
+
+            _context.Oferta.Remove(oferta);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
