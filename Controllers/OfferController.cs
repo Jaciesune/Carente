@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc; // Upewnij się, że masz tę przestrzeń nazw
+﻿using Carente.Models;
+using Microsoft.AspNetCore.Mvc; // Upewnij się, że masz tę przestrzeń nazw
 using Microsoft.AspNetCore.Mvc.Rendering; // Wymagane do ViewBag
 using Microsoft.EntityFrameworkCore; // Wymagane do DbContext
 using System.Linq; // Potrzebne do LINQ

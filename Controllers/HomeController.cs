@@ -1,6 +1,8 @@
 using Carente.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Dodaj ten import
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carente.Controllers
@@ -16,23 +18,37 @@ namespace Carente.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var oferty = await _context.Oferta.ToListAsync();
-            return View(oferty);
+            var carOffers = await _context.Samochod
+                .Include(c => c.Oferta)
+                .Where(c => c.Oferta.Status == "Dostêpna") // Dodaj filtr na status
+                .Select(c => new CarOffer
+                {
+                    Id = c.Id, // Upewnij siê, ¿e przypisujesz Id
+                    Marka = c.Marka,
+                    Rocznik = c.Rocznik,
+                    Cena = c.Oferta != null ? (decimal)c.Oferta.Cena : 0
+                })
+                .ToListAsync();
+
+            return View(carOffers);
         }
+
+
+
+
 
         public async Task<IActionResult> Details(int id)
         {
-            // Pobierz samochód z oferty, w tym dane oferty
             var car = await _context.Samochod
-                .Include(c => c.Oferta) // Do³¹cz ofertê
-                .FirstOrDefaultAsync(c => c.Id == id); // ZnajdŸ samochód po Id
+                .Include(c => c.Oferta)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (car == null)
             {
-                return NotFound(); // Zwróæ b³¹d 404, jeœli samochód nie istnieje
+                return NotFound();
             }
 
-            return View(car); // Zwróæ widok z danymi samochodu
+            return View(car);
         }
 
         public IActionResult Privacy()
