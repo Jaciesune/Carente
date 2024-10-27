@@ -14,7 +14,7 @@
         public int Ilosc_Miejsc { get; set; } // Ilość miejsc
         public int Rocznik { get; set; } // Rok produkcji
         public string Status { get; set; } // Status samochodu
-
+        public string Zdjecie { get; set; } // Zdjęcie samochodu
         public int? Oferta_Id { get; set; }
         public virtual Offer Oferta { get; set; } // Połączenie z ofertą
     }

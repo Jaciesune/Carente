@@ -10,12 +10,11 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="~/images/1.png" class="card-img-top" alt="@item.Marka" />
+                    <img src="@Url.Content(item.Zdjecie)" class="card-img-top" alt="@item.Marka" />
                     <div class="card-body">
                         <h5 class="card-title">@item.Marka</h5>
                         <p class="card-text">Rocznik: @item.Rocznik</p>
                         <p class="card-text">Cena: @item.Cena.ToString("F2") PLN</p>
-                        <!-- Przycisk przechodzący do strony szczegółów -->
                         <a asp-action="Details" asp-route-ofertaId="@item.Oferta_Id" class="btn btn-primary">Szczegóły</a>
                         <form asp-action="DeleteOffer" asp-controller="Home" asp-route-ofertaId="@item.Oferta_Id" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć tę ofertę?');">

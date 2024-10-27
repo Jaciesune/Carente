@@ -4,6 +4,7 @@
 
 <div>
     <h3>Samochód</h3>
+    <img src="@Url.Content(Model.Zdjecie)" alt="@Model.Marka @Model.Model" class="car-image" />
     <p><strong>Marka:</strong> @Model.Marka</p>
     <p><strong>Model:</strong> @Model.Model</p>
     <p><strong>Typ silnika:</strong> @Model.Typ_Silnika</p>
@@ -47,7 +48,6 @@
     // Obsługa zmiany daty rozpoczęcia
     document.getElementById('reservationStart').addEventListener('input', function () {
         const startDate = new Date(this.value);
-        // Tutaj dodaj kod, który aktualizuje `disabled` dla daty zakończenia na podstawie startDate
     });
 
     // Funkcja wyłączająca niedostępne daty
@@ -55,7 +55,14 @@
         const startInput = document.getElementById('reservationStart');
         const endInput = document.getElementById('reservationEnd');
 
-        // Tutaj dodaj logikę wyłączającą dni na podstawie `disabledDates`
     }
     disableUnavailableDates();
 </script>
+
+<style>
+    .car-image {
+        max-width: 100%; /* Umożliwia responsywność */
+        height: auto; /* Utrzymuje proporcje obrazu */
+        margin-bottom: 20px; /* Dodatkowa przestrzeń pod obrazem */
+    }
+</style>

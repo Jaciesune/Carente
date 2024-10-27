@@ -26,7 +26,8 @@ namespace Carente.Controllers
                     Marka = c.Marka,
                     Rocznik = c.Rocznik,
                     Cena = (decimal)c.Oferta.Cena,
-                    Oferta_Id = (int)c.Oferta_Id // dodaj to, aby przekazaæ Oferta_Id do widoku
+                    Oferta_Id = (int)c.Oferta_Id, // dodaj to, aby przekazaæ Oferta_Id do widoku
+                    Zdjecie = c.Zdjecie
                 })
                 .ToListAsync();
 

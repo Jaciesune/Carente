@@ -5,7 +5,8 @@
         public string Marka { get; set; }
         public int Rocznik { get; set; }
         public decimal Cena { get; set; }
-        public int Oferta_Id { get; set; } // Dodaj tę właściwość
+        public int Oferta_Id { get; set; }
+        public string Zdjecie { get; set; }
     }
 
 }
