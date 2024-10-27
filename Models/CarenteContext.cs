@@ -11,6 +11,9 @@ public class CarenteContext : DbContext
     // DbSet dla tabeli Oferta
     public DbSet<Offer> Oferta { get; set; }
 
+    public DbSet<Rezerwacja> Rezerwacja { get; set; }
+
+
     // DbSet dla tabeli Samochod
     public DbSet<Car> Samochod { get; set; }
 

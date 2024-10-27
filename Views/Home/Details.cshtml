@@ -23,3 +23,39 @@
     <p><strong>Opis:</strong> @Model.Oferta.Opis</p>
     <p><strong>Status:</strong> @Model.Oferta.Status</p>
 </div>
+
+<div>
+    <h3>Rezerwacja pojazdu</h3>
+    <form asp-controller="Offer" asp-action="Reserve" method="post">
+        <input type="hidden" name="carId" value="@Model.Id" />
+        <div>
+            <label for="reservationStart">Data rozpoczęcia rezerwacji:</label>
+            <input type="date" id="reservationStart" name="reservationStart" required>
+        </div>
+        <div>
+            <label for="reservationEnd">Data zakończenia rezerwacji:</label>
+            <input type="date" id="reservationEnd" name="reservationEnd" required>
+        </div>
+        <button type="submit">Zarezerwuj</button>
+    </form>
+</div>
+
+<script>
+    // Pobranie dat zarezerwowanych jako tablica JavaScript z ViewBag
+    const disabledDates = @Html.Raw(Json.Serialize(ViewBag.DisabledDates));
+
+    // Obsługa zmiany daty rozpoczęcia
+    document.getElementById('reservationStart').addEventListener('input', function () {
+        const startDate = new Date(this.value);
+        // Tutaj dodaj kod, który aktualizuje `disabled` dla daty zakończenia na podstawie startDate
+    });
+
+    // Funkcja wyłączająca niedostępne daty
+    function disableUnavailableDates() {
+        const startInput = document.getElementById('reservationStart');
+        const endInput = document.getElementById('reservationEnd');
+
+        // Tutaj dodaj logikę wyłączającą dni na podstawie `disabledDates`
+    }
+    disableUnavailableDates();
+</script>

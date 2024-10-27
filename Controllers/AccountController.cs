@@ -36,8 +36,9 @@ public class AccountController : Controller
                 if (result == PasswordVerificationResult.Success)
                 {
                     // Ustaw sesję
-                    HttpContext.Session.SetString("UserId", user.id.ToString()); // Zapisz ID użytkownika w sesji
+                    HttpContext.Session.SetInt32("UserId", user.id);
                     return RedirectToAction("Index", "Home");
+
                 }
                 else
                 {
