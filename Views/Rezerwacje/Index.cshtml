@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Carente.Models.RezerwacjaViewModel>
+
+<h2>Twoje Rezerwacje</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Marka</th>
+            <th>Model</th>
+            <th>Cena Oferty</th>
+            <th>Data Rozpoczęcia</th>
+            <th>Data Zakończenia</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rezerwacja in Model)
+        {
+            <tr>
+                <td>@rezerwacja.Marka</td>
+                <td>@rezerwacja.Model</td>
+                <td>@rezerwacja.Cena.ToString("C")</td>
+                <td>@rezerwacja.Data_Rozpoczecia.ToShortDateString()</td>
+                <td>@rezerwacja.Data_Zakonczenia.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
