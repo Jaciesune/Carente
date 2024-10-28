@@ -10,6 +10,7 @@
             <th>Cena Oferty</th>
             <th>Data Rozpoczęcia</th>
             <th>Data Zakończenia</th>
+            <th>Akcje</th> <!-- New column for actions -->
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,12 @@
                 <td>@rezerwacja.Cena.ToString("C")</td>
                 <td>@rezerwacja.Data_Rozpoczecia.ToShortDateString()</td>
                 <td>@rezerwacja.Data_Zakonczenia.ToShortDateString()</td>
+                <td>
+                    <form asp-action="Cancel" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@rezerwacja.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Anuluj</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

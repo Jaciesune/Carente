@@ -16,8 +16,8 @@ namespace Carente.Controllers
 
         public IActionResult Index()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
 
+            var userId = HttpContext.Session.GetInt32("UserId");
             var rezerwacje = _context.Rezerwacja
                 .Where(r => r.Uzytkownik_Id == userId)
                 .Join(_context.Samochod,
@@ -31,7 +31,7 @@ namespace Carente.Controllers
                       })
                 .Select(result => new RezerwacjaViewModel
                 {
-                    Samochod_Id = result.rezerwacja.Samochod_Id,
+                    Id = result.rezerwacja.Id, // Add Id to identify each reservation
                     Marka = result.car.Marka,
                     Model = result.car.Model,
                     Cena = (decimal)result.offer.Cena,
@@ -41,6 +41,19 @@ namespace Carente.Controllers
                 .ToList();
 
             return View(rezerwacje);
+        }
+
+        [HttpPost]
+        public IActionResult Cancel(int id)
+        {
+            var reservation = _context.Rezerwacja.FirstOrDefault(r => r.Id == id);
+            if (reservation != null)
+            {
+                _context.Rezerwacja.Remove(reservation);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
