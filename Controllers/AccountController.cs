@@ -37,6 +37,7 @@ public class AccountController : Controller
                 {
                     // Ustaw sesję
                     HttpContext.Session.SetInt32("UserId", user.id);
+                    HttpContext.Session.SetInt32("typ", user.typ ? 1 : 0);
                     return RedirectToAction("Index", "Home");
 
                 }
@@ -73,7 +74,8 @@ public class AccountController : Controller
                 email = model.email,
                 // Hashowanie hasła przed zapisaniem
                 haslo = _passwordHasher.HashPassword(null, model.haslo),
-                tel = model.tel
+                tel = model.tel,
+                typ = false
             };
 
             _context.Uzytkownik.Add(uzytkownik);

@@ -6,4 +6,5 @@
     public string email { get; set; }
     public string tel { get; set; }
     public string haslo { get; set; }
+    public bool typ { get; set; }
 }

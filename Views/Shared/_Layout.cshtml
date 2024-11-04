@@ -30,27 +30,32 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Rezerwacje" asp-action="Index">Rezerwacje</a>
                             </li>
+                            @if (Context.Session.GetInt32("typ") == 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-success" asp-area="" asp-controller="Offer" asp-action="Create">Dodaj Ofertę</a>
+                                </li>
+                            }
+
                         }
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-success" asp-area="" asp-controller="Offer" asp-action="Create">Dodaj Ofertę</a>
-                        </li>
+                        
                     </ul>
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("UserId") != null)
                         {
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                                    <button type="submit" class="nav-link btn btn-outline-danger">Logout</button>
+                                    <button type="submit" class="nav-link btn btn-outline-danger">Wyloguj się</button>
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link btn btn-outline-primary me-2" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link btn btn-outline-primary me-2" asp-controller="Account" asp-action="Login">Zaloguj się!</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link btn btn-outline-success" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link btn btn-outline-success" asp-controller="Account" asp-action="Register">Zarejestruj się!</a>
                             </li>
                         }
                     </ul>

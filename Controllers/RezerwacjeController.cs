@@ -33,7 +33,7 @@ namespace Carente.Controllers
                     Id = result.rezerwacja.Id,
                     Marka = result.car.Marka,
                     Model = result.car.Model,
-                    Cena = (decimal)result.offer.Cena, // Initial offer price
+                    Cena = (decimal)result.rezerwacja.Cena + (decimal)result.offer.Cena, // Initial offer price
                     Data_Rozpoczecia = result.rezerwacja.Data_Rozpoczecia,
                     Data_Zakonczenia = result.rezerwacja.Data_Zakonczenia
                 })
@@ -59,25 +59,30 @@ namespace Carente.Controllers
             var reservation = _context.Rezerwacja.FirstOrDefault(r => r.Id == id);
             if (reservation == null) return NotFound();
 
-            var insurance = _context.Ubezpieczenie.FirstOrDefault(i => i.Id == selectedInsuranceId);
-            if (insurance != null)
+            // Pobranie wybranego ubezpieczenia
+            var insuranceTemplate = _context.Ubezpieczenie.FirstOrDefault(i => i.Id == selectedInsuranceId);
+            if (insuranceTemplate != null)
             {
-                // Retrieve the car's offer price
-                var offerPrice = _context.Samochod
+                // Pobranie oferty powiązanej z rezerwacją
+                var offer = _context.Samochod
                     .Where(car => car.Id == reservation.Samochod_Id)
-                    .Select(car => car.Oferta.Cena)
+                    .Select(car => car.Oferta)
                     .FirstOrDefault();
 
-                // Calculate the new reservation price with insurance
-                var newCena = (decimal)(offerPrice + insurance.Wartosc);
+                if (offer != null)
+                {
+                    // Obliczenie nowej ceny z ubezpieczeniem
+                    reservation.Cena += insuranceTemplate.Wartosc;
 
-                // Link the insurance to the reservation
-                insurance.Rezerwacja_Id = id;
-                _context.SaveChanges();
+                    // Zapisanie zmiany w bazie danych
+                    _context.SaveChanges();
+                }
             }
 
             return RedirectToAction("Index");
         }
+
+
 
         [HttpPost]
         public IActionResult Cancel(int id)

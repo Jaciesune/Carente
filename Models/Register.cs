@@ -22,4 +22,6 @@ public class Register
     [Required(ErrorMessage = "Numer telefonu jest wymagany.")]
     [Phone(ErrorMessage = "Niepoprawny format numeru telefonu.")]
     public string tel { get; set; }
+
+    public bool typ {  get; set; }
 }

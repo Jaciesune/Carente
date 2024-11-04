@@ -92,7 +92,7 @@ namespace Carente.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Reserve(int carId, DateTime reservationStart, DateTime reservationEnd)
+        public async Task<IActionResult> Reserve(int carId, DateTime reservationStart, DateTime reservationEnd, float cena)
         {
             if (reservationEnd <= reservationStart)
             {
@@ -114,7 +114,8 @@ namespace Carente.Controllers
                 Uzytkownik_Id = userId.Value, // Ustawia ID użytkownika z sesji
                 Samochod_Id = carId,
                 Data_Rozpoczecia = reservationStart,
-                Data_Zakonczenia = reservationEnd
+                Data_Zakonczenia = reservationEnd,
+                Cena = cena
             };
 
             _context.Rezerwacja.Add(newReservation);
