@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Carente.Models.Ubezpieczenie>
+@{
+    ViewBag.Title = "Dodaj Ubezpieczenie";
+}
+
+<h2>Dodaj Ubezpieczenie do Rezerwacji</h2>
+
+<form asp-action="AddInsurance" method="post">
+    <input type="hidden" name="id" value="@ViewBag.ReservationId" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa Ubezpieczenia</th>
+                <th>Cena</th>
+                <th>Wybierz</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var insurance in Model)
+            {
+                <tr>
+                    <td>@insurance.Typ</td>
+                    <td>@insurance.Wartosc.ToString("C")</td>
+                    <td>
+                        <input type="radio" name="selectedInsuranceId" value="@insurance.Id" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Dodaj Ubezpieczenie</button>
+</form>

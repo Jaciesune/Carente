@@ -17,6 +17,10 @@ public class CarenteContext : DbContext
     // DbSet dla tabeli Samochod
     public DbSet<Car> Samochod { get; set; }
 
+    public DbSet<Ubezpieczenie> Ubezpieczenie { get; set; }
+
+    public DbSet<RezerwacjaViewModel> RezerwacjaViewModel { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Konfiguracja relacji między Car a Offer

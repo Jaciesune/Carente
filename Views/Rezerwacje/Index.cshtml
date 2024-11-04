@@ -10,7 +10,7 @@
             <th>Cena Oferty</th>
             <th>Data Rozpoczęcia</th>
             <th>Data Zakończenia</th>
-            <th>Akcje</th> <!-- New column for actions -->
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +27,7 @@
                         <input type="hidden" name="id" value="@rezerwacja.Id" />
                         <button type="submit" class="btn btn-danger btn-sm">Anuluj</button>
                     </form>
+                    <a asp-action="AddInsurance" asp-route-id="@rezerwacja.Id" class="btn btn-primary btn-sm" style="margin-left: 5px;">Ubezpieczenia</a>
                 </td>
             </tr>
         }

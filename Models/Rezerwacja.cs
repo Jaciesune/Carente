@@ -7,5 +7,6 @@
         public int Uzytkownik_Id { get; set; }
         public DateTime Data_Rozpoczecia { get; set; }
         public DateTime Data_Zakonczenia { get; set; }
+
     }
 }
