@@ -101,7 +101,6 @@ namespace Carente.Controllers
             }
 
             var userId = HttpContext.Session.GetInt32("UserId");
-            Console.WriteLine($"UserId from session: {userId}");
 
             if (userId == null)
             {

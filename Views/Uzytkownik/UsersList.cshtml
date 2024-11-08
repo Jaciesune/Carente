@@ -1,0 +1,31 @@
+﻿@model List<Uzytkownik>
+
+<h2>Lista użytkowników</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Email</th>
+            <th>Tel</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.imie</td>
+                <td>@user.nazwisko</td>
+                <td>@user.email</td>
+                <td>@user.tel</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.id" class="btn btn-warning">Edytuj</a>
+                    <form asp-action="Delete" asp-route-id="@user.id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

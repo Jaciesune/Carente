@@ -1,24 +1,29 @@
 ﻿@model Uzytkownik
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Email</th>
-            <th>Tel</th>
-            <th>Hasło</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.id</td>
-            <td>@Model.imie</td>
-            <td>@Model.nazwisko</td>
-            <td>@Model.email</td>
-            <td>@Model.tel</td>
-            <td>@Model.haslo</td>
-        </tr>
-    </tbody>
-</table>
+<form method="post" asp-action="Edit">
+    <div class="form-group">
+        <label for="imie">Imię</label>
+        <input type="text" class="form-control" id="imie" name="imie" value="@Model.imie" />
+    </div>
+    <div class="form-group">
+        <label for="nazwisko">Nazwisko</label>
+        <input type="text" class="form-control" id="nazwisko" name="nazwisko" value="@Model.nazwisko" />
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="@Model.email" />
+    </div>
+    <div class="form-group">
+        <label for="tel">Telefon</label>
+        <input type="text" class="form-control" id="tel" name="tel" value="@Model.tel" />
+    </div>
+    <div class="form-group">
+        <label for="oldPassword">Potwierdź zmiany hasłem</label>
+        <input type="password" class="form-control" id="oldPassword" name="oldPassword" required />
+    </div>
+    <div class="form-group">
+        <label for="haslo">Nowe hasło (opcjonalnie)</label>
+        <input type="password" class="form-control" id="haslo" name="haslo" />
+    </div>
+    <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+</form>
