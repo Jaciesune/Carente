@@ -47,47 +47,56 @@ public class UzytkownikController : Controller
 
     // Edycja danych użytkownika (w tym weryfikacja starego hasła)
     [HttpPost]
-    public async Task<IActionResult> Edit(Uzytkownik updatedUser, string oldPassword)
+    public async Task<IActionResult> Edit(Uzytkownik updatedUser, string oldPassword, string confirmPassword)
     {
-        if (!ModelState.IsValid)
+        var userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
         {
-            return View("user", updatedUser); // Jeśli dane są niepoprawne, wróć do formularza
+            return RedirectToAction("Login", "Account");
         }
 
-        var userId = HttpContext.Session.GetInt32("UserId");
         var existingUser = await _context.Uzytkownik.FindAsync(userId);
-
         if (existingUser == null)
         {
             return NotFound();
         }
 
         // Weryfikacja starego hasła
-        var result = _passwordHasher.VerifyHashedPassword(existingUser, existingUser.haslo, oldPassword);
-        if (result != PasswordVerificationResult.Success)
+        var passwordVerification = _passwordHasher.VerifyHashedPassword(existingUser, existingUser.haslo, oldPassword);
+        if (passwordVerification != PasswordVerificationResult.Success)
         {
             ModelState.AddModelError("", "Potwierdzenie hasłem jest nieprawidłowe.");
-            return View("user", updatedUser); // Jeśli stare hasło jest błędne, wróć do formularza
+            return View("user", existingUser);
         }
 
-        // Edytowanie tylko tych pól, które zostały zmienione
-        existingUser.imie = updatedUser.imie ?? existingUser.imie;
-        existingUser.nazwisko = updatedUser.nazwisko ?? existingUser.nazwisko;
-        existingUser.email = updatedUser.email ?? existingUser.email;
-        existingUser.tel = updatedUser.tel ?? existingUser.tel;
+        // Aktualizacja danych tylko jeśli zmienione
+        if (updatedUser.imie != existingUser.imie)
+            existingUser.imie = updatedUser.imie;
+        if (updatedUser.nazwisko != existingUser.nazwisko)
+            existingUser.nazwisko = updatedUser.nazwisko;
+        if (updatedUser.email != existingUser.email)
+            existingUser.email = updatedUser.email;
+        if (updatedUser.tel != existingUser.tel)
+            existingUser.tel = updatedUser.tel;
 
-        // Jeśli nowe hasło zostało wprowadzone, zaktualizuj hasło
+        // Aktualizacja hasła, jeśli nowe hasło zostało podane i potwierdzenie jest zgodne
         if (!string.IsNullOrEmpty(updatedUser.haslo))
         {
-            existingUser.haslo = _passwordHasher.HashPassword(existingUser, updatedUser.haslo);
-        }
-        else if (!string.IsNullOrEmpty(oldPassword)) // Jeśli nowe hasło nie zostało podane, ale stary hasło jest wprowadzony, potwierdź zmiany
-        {
-            existingUser.haslo = _passwordHasher.HashPassword(existingUser, oldPassword);
+            if (updatedUser.haslo == confirmPassword)
+            {
+                existingUser.haslo = _passwordHasher.HashPassword(existingUser, updatedUser.haslo);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Nowe hasło i jego potwierdzenie nie są zgodne.");
+                return View("user", existingUser);
+            }
         }
 
-        await _context.SaveChangesAsync();  // Zapisz zmiany w bazie danych
-        return RedirectToAction("UserProfile"); // Przekierowanie do profilu użytkownika
+        await _context.SaveChangesAsync();
+
+        // Odświeżenie widoku profilu z aktualnymi danymi
+        return View("user", existingUser);
     }
 
     // Usuwanie użytkownika
