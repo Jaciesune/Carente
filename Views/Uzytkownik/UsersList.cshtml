@@ -20,7 +20,7 @@
                 <td>@user.email</td>
                 <td>@user.tel</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.id" class="btn btn-warning">Edytuj</a>
+                    <a asp-action="EditUserByAdmin" asp-route-id="@user.id" class="btn btn-warning">Edytuj</a>
                     <form asp-action="Delete" asp-route-id="@user.id" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</button>
                     </form>

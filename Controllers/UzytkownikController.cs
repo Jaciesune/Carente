@@ -7,7 +7,7 @@ using Carente.Models;
 public class UzytkownikController : Controller
 {
     private readonly CarenteContext _context;
-    private readonly IPasswordHasher<Uzytkownik> _passwordHasher; // Dodajemy haszowanie haseł
+    private readonly IPasswordHasher<Uzytkownik> _passwordHasher; // Obsługa haszowania haseł
 
     public UzytkownikController(CarenteContext context, IPasswordHasher<Uzytkownik> passwordHasher)
     {
@@ -45,7 +45,27 @@ public class UzytkownikController : Controller
         }
     }
 
-    // Edycja danych użytkownika (w tym weryfikacja starego hasła)
+    // Metoda GET dla edycji użytkownika przez niego samego
+    [HttpGet]
+    public async Task<IActionResult> Edit()
+    {
+        var userId = HttpContext.Session.GetInt32("UserId");
+
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var uzytkownik = await _context.Uzytkownik.FindAsync(userId);
+        if (uzytkownik == null)
+        {
+            return NotFound();
+        }
+
+        return View("user", uzytkownik); // Widok edycji profilu użytkownika
+    }
+
+    // Edycja danych użytkownika przez niego samego (z weryfikacją starego hasła)
     [HttpPost]
     public async Task<IActionResult> Edit(Uzytkownik updatedUser, string oldPassword, string confirmPassword)
     {
@@ -97,6 +117,71 @@ public class UzytkownikController : Controller
 
         // Odświeżenie widoku profilu z aktualnymi danymi
         return View("user", existingUser);
+    }
+
+    // Metoda GET dla edycji danych użytkownika przez admina
+    [HttpGet]
+    public async Task<IActionResult> EditUserByAdmin(int id)
+    {
+        var adminId = HttpContext.Session.GetInt32("UserId");
+        var userType = HttpContext.Session.GetInt32("typ");
+
+        if (userType != 1)
+        {
+            return Unauthorized(); // Tylko admin może edytować innych użytkowników
+        }
+
+        var user = await _context.Uzytkownik.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return View("EditUserByAdmin", user);
+    }
+
+    // Edycja danych użytkownika przez admina (z weryfikacją hasła admina)
+    [HttpPost]
+    public async Task<IActionResult> EditUserByAdmin(int id, Uzytkownik updatedUser, string adminPassword)
+    {
+        var adminId = HttpContext.Session.GetInt32("UserId");
+        var userType = HttpContext.Session.GetInt32("typ");
+
+        if (userType != 1)
+        {
+            return Unauthorized();
+        }
+
+        var admin = await _context.Uzytkownik.FindAsync(adminId);
+        var userToEdit = await _context.Uzytkownik.FindAsync(id);
+
+        if (userToEdit == null || admin == null)
+        {
+            return NotFound();
+        }
+
+        // Weryfikacja hasła admina
+        var passwordVerification = _passwordHasher.VerifyHashedPassword(admin, admin.haslo, adminPassword);
+        if (passwordVerification != PasswordVerificationResult.Success)
+        {
+            ModelState.AddModelError("", "Nieprawidłowe hasło admina.");
+            return View("EditUserByAdmin", userToEdit);
+        }
+
+        // Aktualizacja danych użytkownika
+        userToEdit.imie = updatedUser.imie;
+        userToEdit.nazwisko = updatedUser.nazwisko;
+        userToEdit.email = updatedUser.email;
+        userToEdit.tel = updatedUser.tel;
+
+        if (!string.IsNullOrEmpty(updatedUser.haslo))
+        {
+            userToEdit.haslo = _passwordHasher.HashPassword(userToEdit, updatedUser.haslo);
+        }
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("UsersList");
     }
 
     // Usuwanie użytkownika

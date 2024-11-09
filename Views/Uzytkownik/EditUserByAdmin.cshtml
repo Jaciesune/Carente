@@ -1,0 +1,40 @@
+﻿@model Uzytkownik
+
+<h2>Edytuj Użytkownika</h2>
+
+<form asp-action="EditUserByAdmin" method="post">
+    <input type="hidden" asp-for="id" />
+
+    <div class="form-group">
+        <label asp-for="imie"></label>
+        <input asp-for="imie" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="nazwisko"></label>
+        <input asp-for="nazwisko" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="email"></label>
+        <input asp-for="email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="tel"></label>
+        <input asp-for="tel" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="haslo">Nowe Hasło (opcjonalnie)</label>
+        <input asp-for="haslo" type="password" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Hasło Admina</label>
+        <input type="password" name="adminPassword" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+    <a asp-action="UsersList" class="btn btn-secondary">Anuluj</a>
+</form>
