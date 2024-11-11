@@ -10,6 +10,7 @@
             <th>Cena Oferty</th>
             <th>Data Rozpoczęcia</th>
             <th>Data Zakończenia</th>
+            <th>Ubezpieczenie</th> <!-- Nowa kolumna do wyświetlania ubezpieczenia -->
             <th>Akcje</th>
         </tr>
     </thead>
@@ -22,6 +23,16 @@
                 <td>@rezerwacja.Cena.ToString("C")</td>
                 <td>@rezerwacja.Data_Rozpoczecia.ToShortDateString()</td>
                 <td>@rezerwacja.Data_Zakonczenia.ToShortDateString()</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(rezerwacja.WybraneUbezpieczenie))
+                    {
+                        <span>@rezerwacja.WybraneUbezpieczenie</span>
+                    }
+                    else
+                    {
+                        <span>Brak ubezpieczenia</span>
+                    }
+                </td>
                 <td>
                     <form asp-action="Cancel" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="@rezerwacja.Id" />
