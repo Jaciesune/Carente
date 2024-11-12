@@ -8,6 +8,6 @@
         public decimal Cena { get; set; }
         public DateTime Data_Rozpoczecia { get; set; }
         public DateTime Data_Zakonczenia { get; set; }
+        public string WybraneUbezpieczenie { get; set; }
     }
-
 }

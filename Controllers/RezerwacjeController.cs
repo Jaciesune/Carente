@@ -17,6 +17,7 @@ namespace Carente.Controllers
         public IActionResult Index()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
+
             var rezerwacje = _context.Rezerwacja
                 .Where(r => r.Uzytkownik_Id == userId)
                 .Join(_context.Samochod,
@@ -33,9 +34,11 @@ namespace Carente.Controllers
                     Id = result.rezerwacja.Id,
                     Marka = result.car.Marka,
                     Model = result.car.Model,
-                    Cena = (decimal)result.rezerwacja.Cena + (decimal)result.offer.Cena, // Initial offer price
+                    Cena = (decimal)result.rezerwacja.Cena + (decimal)result.offer.Cena, // Cena oferty + rezerwacji
                     Data_Rozpoczecia = result.rezerwacja.Data_Rozpoczecia,
-                    Data_Zakonczenia = result.rezerwacja.Data_Zakonczenia
+                    Data_Zakonczenia = result.rezerwacja.Data_Zakonczenia,
+                    // Pobranie opisu wybranego ubezpieczenia z sesji
+                    WybraneUbezpieczenie = HttpContext.Session.GetString($"InsuranceDescription_{result.rezerwacja.Id}")
                 })
                 .ToList();
 
@@ -76,11 +79,29 @@ namespace Carente.Controllers
 
                     // Zapisanie zmiany w bazie danych
                     _context.SaveChanges();
+
+                    // Pobieranie obecnych ubezpieczeń z sesji
+                    var existingInsurance = HttpContext.Session.GetString($"InsuranceDescription_{id}");
+                    if (!string.IsNullOrEmpty(existingInsurance))
+                    {
+                        // Dodanie nowego ubezpieczenia do istniejącego opisu (oddzielając przecinkiem)
+                        existingInsurance += $", {insuranceTemplate.Typ}";
+                    }
+                    else
+                    {
+                        // Jeśli brak ubezpieczeń, zapisujemy pierwsze
+                        existingInsurance = insuranceTemplate.Typ;
+                    }
+
+                    // Zapisanie nowego ciągu ubezpieczeń do sesji
+                    HttpContext.Session.SetString($"InsuranceDescription_{id}", existingInsurance);
                 }
             }
 
+            // Redirect do Index po zapisaniu ubezpieczenia
             return RedirectToAction("Index");
         }
+
 
 
 
